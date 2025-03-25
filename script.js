@@ -122,7 +122,7 @@ const gameController = (function () {
         activePlayer = players[0];
         players[0].name = "Player 1";
         players[0].score.reset();
-        players[1].name = "Player 1";
+        players[1].name = "Player 2";
         players[1].score.reset();
     };
 
@@ -169,19 +169,28 @@ const gameController = (function () {
         gameBoard.resetBoard();
         roundCounter.increment();
         activePlayer = players[0];
-    }
-    
+    };
+
     const getRoundCount = () => roundCounter.getCount();
 
     const getPlayerScore = (playerIndex) =>
         players[playerIndex].score.getCount();
+
+    const changePlayerName = (player, newName) => {
+        players[player].name = newName;
+    }
+
+    const getPlayerName = (playerIndex) => players[playerIndex].name;
+
     return {
         playRound,
         getActivePlayer,
         resetGame,
         getBoard: board.getBoard,
         getPlayerScore,
-        getRoundCount
+        getRoundCount,
+        changePlayerName,
+        getPlayerName,
     };
 })();
 
@@ -204,8 +213,12 @@ const displayController = (function () {
     const playerCardTwo = document.querySelector("#player2");
     const playerScoreOne = playerCardOne.children[2];
     const playerScoreTwo = playerCardTwo.children[2];
+    const playerNameOne = playerCardOne.children[0];
+    const playerNameTwo = playerCardTwo.children[0];
     const roundContainer = document.querySelector(".round-container");
     const restartButton = document.querySelector(".game-section>button");
+    const dialog = document.querySelector("dialog");
+    const form = dialog.querySelector("form");
 
     const updateScreen = () => {
         boardContainerDiv.textContent = "";
@@ -230,6 +243,8 @@ const displayController = (function () {
 
         playerScoreOne.textContent = gameController.getPlayerScore(0);
         playerScoreTwo.textContent = gameController.getPlayerScore(1);
+        playerNameOne.textContent = gameController.getPlayerName(0);
+        playerNameTwo.textContent = gameController.getPlayerName(1);
 
         roundContainer.textContent = "Round " + gameController.getRoundCount();
     };
@@ -246,6 +261,27 @@ const displayController = (function () {
         gameController.resetGame();
         updateScreen();
     });
+
+    let activePlayerCardIndex = null;
+
+    function handlePlayerCardClicked(e) {
+        const input = dialog.querySelector("input");
+        activePlayerCardIndex = e.target.closest(".player-card").dataset.index;
+        input.value = gameController.getPlayerName(activePlayerCardIndex);
+        dialog.showModal();
+    }
+
+    playerCardOne.addEventListener("click", handlePlayerCardClicked); 
+    playerCardTwo.addEventListener("click", handlePlayerCardClicked);
+
+    form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const newName = formData.get("name");
+        gameController.changePlayerName(activePlayerCardIndex, newName);
+        dialog.close();
+        updateScreen();
+    })
 
     updateScreen();
 })();

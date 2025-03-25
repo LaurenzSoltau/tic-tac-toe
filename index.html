@@ -14,7 +14,7 @@
         </header>
         <main>
             <div class="card-section">
-                <div class="player-card" id="player1">
+                <div class="player-card" id="player1" data-index="0">
                     <span class="name">Player 1</span>
                     <span class="symbol">X</span>
                     <span class="score">0</span>
@@ -36,7 +36,7 @@
                 <button>Restart</button>
             </div>
             <div class="card-section">
-                <div class="player-card" id="player2">
+                <div class="player-card" id="player2" data-index="1">
                     <span class="name">Player 2</span>
                     <span class="symbol">O</span>
                     <span class="score">0</span>
@@ -44,5 +44,18 @@
             </div>
         </main>
         <footer>created by Laurenz Soltau</footer>
+        <dialog>
+            <form>
+                <input
+                    type="text"
+                    name="name"
+                    id="name"
+                    minlength="1"
+                    maxlength="10"
+                    required
+                />
+                <button>Save</button>
+            </form>
+        </dialog>
     </body>
 </html>

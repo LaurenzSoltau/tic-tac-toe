@@ -201,3 +201,9 @@ footer {
     font-size: 1.5rem;
 }
 
+dialog {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
